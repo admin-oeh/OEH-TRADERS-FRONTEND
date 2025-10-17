@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="OEH TRADERS - Professional tactical equipment for military, law enforcement, and civilian use. Your trusted partner for high-quality tactical gear, body armor, and mission-critical equipment."
+    />
+    <meta name="keywords" content="tactical gear, military equipment, law enforcement gear, body armor, tactical clothing, OEH TRADERS" />
+    <meta name="author" content="OEH TRADERS" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://oehtraders.com/" />
+    <meta property="og:title" content="OEH TRADERS - Professional Tactical Equipment" />
+    <meta property="og:description" content="Professional tactical equipment for military, law enforcement, and civilian use. Trusted by professionals worldwide." />
+    <meta property="og:image" content="%PUBLIC_URL%/social-preview.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://oehtraders.com/" />
+    <meta property="twitter:title" content="OEH TRADERS - Professional Tactical Equipment" />
+    <meta property="twitter:description" content="Professional tactical equipment for military, law enforcement, and civilian use. Trusted by professionals worldwide." />
+    <meta property="twitter:image" content="%PUBLIC_URL%/social-preview.jpg" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
+    <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest">
+    <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#dc2626">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
+
+    <!-- ✅ Updated Tawk.to Live Chat Script -->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+      (function() {
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/68e7c340c312bc194e49a3c9/1j74l5dlj';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+
+      // Custom visitor data handler for React integration
+      function setTawkVisitorData(userData) {
+        if (window.Tawk_API && window.Tawk_API.setAttributes) {
+          window.Tawk_API.setAttributes(userData, function(error) {
+            if (!error) {
+              console.log('Tawk.to visitor data updated successfully');
+            }
+          });
+        }
+      }
+      window.setTawkVisitorData = setTawkVisitorData;
+
+      // Load event customization
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_API.onLoad = function() {
+        console.log('Tawk.to chat widget loaded successfully');
+        try {
+          const userData = localStorage.getItem('user_data');
+          if (userData) {
+            const user = JSON.parse(userData);
+            setTawkVisitorData({
+              name: user.name || 'Visitor',
+              email: user.email || '',
+              company: user.company_name || 'OEH TRADERS Customer',
+              phone: user.phone || '',
+              user_id: user.id || ''
+            });
+          }
+        } catch (error) {
+          console.log('No user data found for Tawk.to');
+        }
+      };
+    </script>
+    <!--End of Tawk.to Script-->
+
+    <title>OEH TRADERS - Professional Tactical Equipment | Military & Law Enforcement Gear</title>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "OEH TRADERS",
+      "description": "Professional tactical equipment supplier for military, law enforcement, and civilian use",
+      "url": "https://oehtraders.com",
+      "logo": "https://oehtraders.com/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-800-TACTICAL",
+        "contactType": "customer service",
+        "email": "info@oehtraders.com",
+        "areaServed": "US",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://www.facebook.com/oehtraders",
+        "https://www.instagram.com/oehtraders",
+        "https://www.linkedin.com/company/oeh-traders"
+      ]
+    }
+    </script>
+
+    <style>
+      /* Loading screen styles */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: white;
+      }
+      .loading-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background: #dc2626;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 24px;
+        color: white;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #333;
+        border-top: 4px solid #dc2626;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .loading-text {
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        color: #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loading-logo">OEH</div>
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading OEH TRADERS...</div>
+    </div>
+
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>You need to enable JavaScript to run this application.</p>
+        <p>OEH TRADERS is a modern web application that requires JavaScript for full functionality.</p>
+        <p>Please enable JavaScript in your browser settings and refresh the page.</p>
+      </div>
+    </noscript>
+    
+    <div id="root"></div>
+    
+    <script>
+      // Remove loading screen when React app loads
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const loadingScreen = document.getElementById('loading-screen');
+          if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.transition = 'opacity 0.5s ease';
+            setTimeout(function() {
+              loadingScreen.remove();
+            }, 500);
+          }
+        }, 1000);
+      });
+
+      // Fallback: remove loading screen after 5 seconds
+      setTimeout(function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen && loadingScreen.parentNode) {
+          loadingScreen.remove();
+        }
+      }, 5000);
+
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+              console.log('SW registered: ', registration);
+            })
+            .catch(function(error) {
+              console.log('SW registration failed: ', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

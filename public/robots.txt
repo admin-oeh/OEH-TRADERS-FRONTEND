@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://oehtraders.com/sitemap.xml
+
+# Directories
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
