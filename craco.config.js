@@ -1,46 +1,42 @@
-// Load configuration from environment or config file
-const path = require('path');
-
-// Environment variable overrides
-const config = {
-  disableHotReload: process.env.DISABLE_HOT_RELOAD === 'true',
-};
+const { when, whenDev, whenProd } = require('@craco/craco');
 
 module.exports = {
   webpack: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-    configure: (webpackConfig) => {
-      
-      // Disable hot reload completely if environment variable is set
-      if (config.disableHotReload) {
-        // Remove hot reload related plugins
-        webpackConfig.plugins = webpackConfig.plugins.filter(plugin => {
-          return !(plugin.constructor.name === 'HotModuleReplacementPlugin');
+    configure: (webpackConfig, { env, paths }) => {
+      // Remove React Refresh in production
+      if (env === 'production') {
+        // Remove React Refresh plugin
+        webpackConfig.plugins = webpackConfig.plugins.filter(
+          plugin => 
+            !(plugin.constructor.name === 'ReactRefreshPlugin') &&
+            !(plugin.constructor.name === 'InlineChunkHtmlPlugin' && 
+              plugin.options && plugin.options.inlineChunks && 
+              plugin.options.inlineChunks.includes('react-refresh'))
+        );
+
+        // Remove React Refresh from babel loader
+        webpackConfig.module.rules.forEach(rule => {
+          if (rule.oneOf) {
+            rule.oneOf.forEach(oneOfRule => {
+              if (oneOfRule.loader && oneOfRule.loader.includes('babel-loader')) {
+                if (oneOfRule.options && oneOfRule.options.plugins) {
+                  oneOfRule.options.plugins = oneOfRule.options.plugins.filter(
+                    plugin => 
+                      !(typeof plugin === 'string' && plugin.includes('react-refresh')) &&
+                      !(Array.isArray(plugin) && plugin[0] && plugin[0].includes('react-refresh'))
+                  );
+                }
+              }
+            });
+          }
         });
-        
-        // Disable watch mode
-        webpackConfig.watch = false;
-        webpackConfig.watchOptions = {
-          ignored: /.*/, // Ignore all files
-        };
-      } else {
-        // Add ignored patterns to reduce watched directories
-        webpackConfig.watchOptions = {
-          ...webpackConfig.watchOptions,
-          ignored: [
-            '**/node_modules/**',
-            '**/.git/**',
-            '**/build/**',
-            '**/dist/**',
-            '**/coverage/**',
-            '**/public/**',
-          ],
-        };
       }
-      
       return webpackConfig;
-    },
+    }
   },
+  babel: {
+    plugins: [
+      ...whenDev(() => [['react-refresh/babel', { skipEnvCheck: true }]], [])
+    ]
+  }
 };
