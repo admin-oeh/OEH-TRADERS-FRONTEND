@@ -1,0 +1,11 @@
+[phases.setup]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npx serve -s build -l $PORT"
+
+[build.env]
+NODE_VERSION = "18.0.0"
