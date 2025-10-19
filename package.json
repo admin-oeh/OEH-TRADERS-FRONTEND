@@ -59,15 +59,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
-    "clean": "rimraf build node_modules/.cache .eslintcache .npmrc",
-    "clean:all": "rimraf build node_modules package-lock.json yarn.lock .eslintcache",
-    "prebuild": "npm run clean",
-    "build:clean": "npm run clean && npm run build",
-    "build:prod": "set NODE_ENV=production && npm run build:clean",
-    "railway:build": "npm run clean && set NODE_ENV=production && npm run build",
-    "postinstall": "npm run clean",
-    "env:check": "node -e \"console.log('NODE_ENV:', process.env.NODE_ENV); console.log('API URL:', process.env.REACT_APP_API_URL)\""
+    "test": "craco test"
   },
   "browserslist": {
     "production": [
@@ -91,7 +83,6 @@
     "eslint-plugin-react": "7.37.4",
     "globals": "15.15.0",
     "postcss": "^8.4.49",
-    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.17"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
