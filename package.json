@@ -59,7 +59,15 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "clean": "rd /s /q build 2>nul || true && rd /s /q node_modules\\.cache 2>nul || true && del .eslintcache .npmrc 2>nul || true",
+    "clean:all": "rd /s /q build node_modules 2>nul || true && del package-lock.json yarn.lock .eslintcache 2>nul || true",
+    "prebuild": "npm run clean",
+    "build:clean": "npm run clean && npm run build",
+    "build:prod": "set NODE_ENV=production&& npm run build:clean",
+    "railway:build": "npm run clean && set NODE_ENV=production&& npm run build",
+    "postinstall": "npm run clean",
+    "env:check": "node -e \"console.log('NODE_ENV:', process.env.NODE_ENV); console.log('API URL:', process.env.REACT_APP_API_URL)\""
   },
   "browserslist": {
     "production": [
