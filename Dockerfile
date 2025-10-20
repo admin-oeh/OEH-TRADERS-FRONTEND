@@ -1,43 +1,38 @@
-# Use official Node.js runtime as base image
+# Use official Node.js runtime
 FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json* ./
 COPY yarn.lock* ./
 
-# Install dependencies
-RUN npm install --silent
+# Install dependencies with clearer error reporting
+RUN npm install --loglevel verbose
 
 # Copy source code
 COPY . .
 
-# Create environment configuration script
-RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'set -e' >> /docker-entrypoint.sh && \
-    echo 'echo "Creating runtime environment configuration..."' >> /docker-entrypoint.sh && \
-    echo 'cat > ./public/env-config.js << EOF' >> /docker-entrypoint.sh && \
-    echo 'window.env = {' >> /docker-entrypoint.sh && \
-    echo '  REACT_APP_BACKEND_URL: \"'"'"'${REACT_APP_BACKEND_URL:-https://o-e-h-traders.up.railway.app}'"'"'\",' >> /docker-entrypoint.sh && \
-    echo '  REACT_APP_API_URL: \"'"'"'${REACT_APP_API_URL:-https://o-e-h-traders.up.railway.app/api}'"'"'\"' >> /docker-entrypoint.sh && \
-    echo '};' >> /docker-entrypoint.sh && \
-    echo 'EOF' >> /docker-entrypoint.sh && \
-    echo 'echo "Building React application..."' >> /docker-entrypoint.sh && \
-    echo 'npm run build' >> /docker-entrypoint.sh && \
-    echo 'echo "Starting server..."' >> /docker-entrypoint.sh && \
-    echo 'exec npm start' >> /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
-
-# Build the application
+# Create production build
 RUN npm run build
 
-# Install serve to run the production build
+# Create environment config
+RUN echo "window.env = { \
+  REACT_APP_BACKEND_URL: 'https://o-e-h-traders.up.railway.app', \
+  REACT_APP_API_URL: 'https://o-e-h-traders.up.railway.app/api' \
+};" > ./build/env-config.js
+
+# Install serve globally
 RUN npm install -g serve
 
 # Expose port
 EXPOSE 3000
 
-# Use custom entrypoint
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
+# Start server
+CMD ["serve", "-s", "build", "-l", "3000"]
