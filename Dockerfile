@@ -1,21 +1,18 @@
-# Use official Node.js runtime
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package.json ./
-COPY package-lock.json* ./
+COPY package*.json ./
 COPY yarn.lock* ./
 
-# Install dependencies with legacy peer deps to resolve conflicts
+# Install dependencies with legacy peer deps
 RUN npm install --legacy-peer-deps --silent
 
 # Copy source code
 COPY . .
 
-# Create production build
+# Build the application
 RUN npm run build
 
 # Create environment config
@@ -24,11 +21,10 @@ RUN echo "window.env = { \
   REACT_APP_API_URL: 'https://o-e-h-traders.up.railway.app/api' \
 };" > ./build/env-config.js
 
-# Install serve globally
-RUN npm install -g serve
+# Install a specific version of serve that works
+RUN npm install -g serve@14.2.1
 
-# Expose port
 EXPOSE 3000
 
-# Start server
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Use the correct serve command syntax
+CMD ["serve", "-s", "build", "-p", "3000"]
