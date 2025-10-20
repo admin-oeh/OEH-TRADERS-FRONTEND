@@ -1,5 +1,5 @@
-# Multi-stage build for production
-FROM node:18-alpine AS builder
+# Use official Node.js runtime as base image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -9,36 +9,35 @@ COPY package*.json ./
 COPY yarn.lock* ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --silent
 
 # Copy source code
 COPY . .
 
+# Create environment configuration script
+RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'set -e' >> /docker-entrypoint.sh && \
+    echo 'echo "Creating runtime environment configuration..."' >> /docker-entrypoint.sh && \
+    echo 'cat > ./public/env-config.js << EOF' >> /docker-entrypoint.sh && \
+    echo 'window.env = {' >> /docker-entrypoint.sh && \
+    echo '  REACT_APP_BACKEND_URL: \"'"'"'${REACT_APP_BACKEND_URL:-https://o-e-h-traders.up.railway.app}'"'"'\",' >> /docker-entrypoint.sh && \
+    echo '  REACT_APP_API_URL: \"'"'"'${REACT_APP_API_URL:-https://o-e-h-traders.up.railway.app/api}'"'"'\"' >> /docker-entrypoint.sh && \
+    echo '};' >> /docker-entrypoint.sh && \
+    echo 'EOF' >> /docker-entrypoint.sh && \
+    echo 'echo "Building React application..."' >> /docker-entrypoint.sh && \
+    echo 'npm run build' >> /docker-entrypoint.sh && \
+    echo 'echo "Starting server..."' >> /docker-entrypoint.sh && \
+    echo 'exec npm start' >> /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh
+
 # Build the application
 RUN npm run build
 
-# Production stage - Using different nginx image
-FROM nginxinc/nginx-unprivileged:alpine
-
-# Install gettext for envsubst (environment variable substitution)
-USER root
-RUN apk add --no-cache gettext
-USER nginx
-
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx-default.conf.template /etc/nginx/templates/default.conf.template
-
-# Copy built app from builder stage
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Create a script to handle environment variables
-COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+# Install serve to run the production build
+RUN npm install -g serve
 
 # Expose port
-EXPOSE 8080
+EXPOSE 3000
 
 # Use custom entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
