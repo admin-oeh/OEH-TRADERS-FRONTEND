@@ -9,8 +9,8 @@ COPY package.json ./
 COPY package-lock.json* ./
 COPY yarn.lock* ./
 
-# Install dependencies with clearer error reporting
-RUN npm install --loglevel verbose
+# Install dependencies with legacy peer deps to resolve conflicts
+RUN npm install --legacy-peer-deps --silent
 
 # Copy source code
 COPY . .
@@ -29,10 +29,6 @@ RUN npm install -g serve
 
 # Expose port
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
 
 # Start server
 CMD ["serve", "-s", "build", "-l", "3000"]
