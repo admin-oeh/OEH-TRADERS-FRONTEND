@@ -17,11 +17,13 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage - Using different nginx image
+FROM nginxinc/nginx-unprivileged:alpine
 
 # Install gettext for envsubst (environment variable substitution)
+USER root
 RUN apk add --no-cache gettext
+USER nginx
 
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -35,7 +37,7 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
 # Expose port
-EXPOSE 80
+EXPOSE 8080
 
 # Use custom entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
