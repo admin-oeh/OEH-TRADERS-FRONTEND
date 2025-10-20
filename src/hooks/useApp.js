@@ -1,35 +1,31 @@
-// src/hooks/useApp.js
+import { API } from '../utils/constants';
+
 export const useApp = () => {
+  const loginUser = async (email, password) => {
+    try {
+      const response = await fetch(`${API}/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
- const loginUser = async (email, password) => {
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      // Save the access token from backend
-      localStorage.setItem("token", data.access_token);
-
-      // Optionally, save user info if needed
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      return { success: true };
-    } else {
-      return { success: false, error: data.detail || "Login failed" };
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("user_token", data.access_token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        return { success: true, user: data.user };
+      } else {
+        return { success: false, error: data.detail || "Login failed" };
+      }
+    } catch (err) {
+      console.error(err);
+      return { success: false, error: "Server error" };
     }
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: "Server error" };
-  }
-};
+  };
 
   const registerUser = async (userData) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/users/register", { // changed 127.0.0.1 → localhost
+      const response = await fetch(`${API}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
